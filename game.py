@@ -7,7 +7,6 @@ Adding Snake - A snake could be added to the game which changes the game in a wa
 Crooked Dice - The dice roll would result in giving a dice throw of even numbers"""
 
 from random import choice as throw
-from time import sleep
 
 class Game():
     """Initialize the object with player position and maximum number of positions that a person can move on roll of a dice"""
@@ -21,15 +20,15 @@ class Game():
     """Performs a Dice throw, add the new throw to current position of the player"""
     def throwDice(self):
         if self.currentPosition == self.maxPosition:
-            print('You have completed the game already ! ')
+            print("You have completed the game already ! ")
             return
         __diceThrow = throw(range(1,self.maxDice+1)) if not self.isCrooked else throw(range(2,self.maxDice+1,2))
         print("Dice throw done with a throw of {0} !!".format(__diceThrow))
         self.__validateNewPosition(__diceThrow)
         self.__checkForSnake()
-        sleep(1)
-        return __diceThrow
+        return __diceThrow,self.currentPosition
 
+    """[PRIVATE FUNCTION]Validates the new position of player based on the delata distance and Maximum allowed positions of Board"""
     def __validateNewPosition(self,distanceDelta):
         if (self.currentPosition + distanceDelta == self.maxPosition):
             self.currentPosition += distanceDelta
@@ -41,21 +40,27 @@ class Game():
             self.currentPosition += distanceDelta
             print("Your new position is {0} !!".format(self.currentPosition))
         
-
+    """Adds a snake to the Board, accepts start position and end position of snake.
+        Since It's a snake, the end position need to be lower than the start position"""
     def addSnake(self,startPos,endPos):
+        if type(startPos) != int or type(endPos) != int:
+            print("start and end positions have to be Integers! ")
+            return 2
         if endPos >= startPos:
-            print('End Position has to be less than start position for adding a Snake')
-            return
+            print("End Position has to be less than start position for adding a Snake")
+            return 1
         else:
             self.snakes[startPos] = endPos
-            print('Snake has been added to the Game board starting at {0} and ending at {1} !'.format(startPos,endPos))
-        
+            print("Snake has been added to the Game board starting at {0} and ending at {1} !".format(startPos,endPos))
+            return 0
+
+    """[PRIVATE FUNCTION]Updates the player position if a snake is present at the landed position of the player """    
     def __checkForSnake(self):
         if self.currentPosition in self.snakes:
-            print('Uh! Oh!! Looks like you got bitten by a snake!')
+            print("Uh! Oh!! Looks like you got bitten by a snake!")
             self.currentPosition = self.snakes[self.currentPosition]
             print("Your new position is {0} !!".format(self.currentPosition))
 
 
 if __name__ == "__main__":
-    print('This is an Import module. Can not be run directly')
+    print("This is an Import module. Can not be run directly")
