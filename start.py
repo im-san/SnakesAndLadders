@@ -17,8 +17,8 @@ class Game():
         self.maxPosition = maxPosition
 
     """Performs a Dice throw, add the new throw to current position of the player"""
-    def throwDice(self):
-        __diceThrow = throw(range(1,self.maxDice+1))
+    def throwDice(self, isCrooked = False):
+        __diceThrow = throw(range(1,self.maxDice+1)) if not isCrooked else throw(range(2,self.maxDice+1,2))
         print("Dice throw done with a throw of {0} !!".format(__diceThrow))
         self.__validateNewPosition(__diceThrow)
         sleep(1)
@@ -26,7 +26,7 @@ class Game():
     def __validateNewPosition(self,distanceDelta):
         if (self.currentPosition + distanceDelta == self.maxPosition):
             self.currentPosition += distanceDelta
-            print("Yay !! You completed the game ! \n Please Re-run the game to start a new game")
+            print("Yay !! You completed the game ! \nPlease Re-run the game to start a new game ")
             exit(0)
         elif (self.currentPosition + distanceDelta > self.maxPosition):
             print("Better luck with next throw, you need a {0} or a throw less than {0} to move forward !!".format(self.maxPosition - self.currentPosition ))
@@ -41,7 +41,8 @@ gameboard = """
 ***************** OF **********************
 *********** SNAKES & LADDERS **************
 1. Roll the dice
-2. Exit
+2. Roll a Crooked Dice
+3. Exit
 """
 
 gameInstance = Game()
@@ -55,6 +56,8 @@ while not __exit:
     if get_uip == 1:
         gameInstance.throwDice()
     elif get_uip == 2:
+        gameInstance.throwDice(isCrooked=True)
+    elif get_uip == 3:
         __exit = True
     else:
         print("Please enter a valid input based on the provided menu values !! ")
